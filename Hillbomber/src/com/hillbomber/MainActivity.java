@@ -21,8 +21,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.view.ViewPager.LayoutParams;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
@@ -41,6 +44,8 @@ public class MainActivity extends MapActivity {
 	private LocationListener locationListener;
 
 	private MapView mapView;
+	private View routeView; 
+	private Button refreshButton, newButton, startButton, endButton;  
 
 	private MapController mapController;
 	private GoogleParser googleParser;
@@ -51,6 +56,12 @@ public class MainActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
+			      (Context.LAYOUT_INFLATER_SERVICE);
+		routeView = inflater.inflate(R.layout.route, null);
+		routeView.setVisibility(View.GONE);
+		addContentView(routeView, new LayoutParams());
+		
 		mapView = (MapView) findViewById(R.id.mapview);
 		userPreferences = getPreferences(MODE_PRIVATE);
 		String access_token = userPreferences.getString("access_token", null);
@@ -154,17 +165,22 @@ public class MainActivity extends MapActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
-
-	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	public void onNewRouteClicked(View v) {
+		routeView.setVisibility(View.VISIBLE);
+	}
+	
+	public void onEndRouteClicked(View v) {
+		routeView.setVisibility(View.VISIBLE);
+	}
+	
+	public void onRefreshClicked(View v) {
+	}
+	
 	private InputStream getConnection(String url) {
 		InputStream is = null;
 		try {

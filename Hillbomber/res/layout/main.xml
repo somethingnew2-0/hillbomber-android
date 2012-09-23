@@ -11,4 +11,32 @@
         android:apiKey="0LGOZpKMcQCYTkN6MoxXdQBvA2e9SpJgwYUK8Sw"
         android:clickable="true" />
 
+    <Button
+        android:id="@+id/newRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/newRoute"
+        android:onClick="onNewRouteClicked" />
+
+    <Button
+        android:id="@+id/endRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/endRoute"
+        android:visibility="gone" 
+        android:onClick="onEndRouteClicked"/>
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/refresh"
+        android:onClick="onRefreshClicked" />
+
 </RelativeLayout>
