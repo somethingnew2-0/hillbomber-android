@@ -149,7 +149,7 @@ public class MainActivity extends MapActivity {
 
 						@Override
 						public void onComplete(String response, Object state) {
-							Log.i("Facebook Me", response);
+//							Log.i("Facebook Me", response);
 							try {
 								JSONObject me = (JSONObject) new JSONTokener(
 										response).nextValue();
