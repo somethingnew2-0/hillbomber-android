@@ -102,8 +102,8 @@ public class MainActivity extends MapActivity {
 
 		mapView = (MapView) findViewById(R.id.mapview);
 		userPreferences = getPreferences(MODE_PRIVATE);
-		String accessToken = null;//userPreferences.getString("access_token", null);
-		long expires = 0;//userPreferences.getLong("access_expires", 0);
+		String accessToken = userPreferences.getString("access_token", null);
+		long expires = userPreferences.getLong("access_expires", 0);
 		facebookId = userPreferences.getString("facebook_id", null);
 		facebookName = userPreferences.getString("facebook_name", null);
 		if (accessToken != null && expires != 0) {
@@ -186,48 +186,11 @@ public class MainActivity extends MapActivity {
 
 		googleParser = new GoogleParser();
 
-		BufferedReader in = null;
-		String line = null;
-		try {
-			in = new BufferedReader(
-					new InputStreamReader(
-							getConnection("http://hillbomber.herokuapp.com/trails.json")));
-			while ((line = in.readLine()) != null) {
-				JSONArray routes = (JSONArray) new JSONTokener(line)
-						.nextValue();
-				for (int i = 0; i < routes.length(); i++) {
-					JSONObject route = routes.getJSONObject(i);
-					String url = googleParser.directions(new GeoPoint(
-							(int) (route.getDouble("s_lat") * 1E6),
-							(int) (route.getDouble("s_long") * 1E6)),
-							new GeoPoint(
-									(int) (route.getDouble("e_lat") * 1E6),
-									(int) (route.getDouble("e_long") * 1E6)));
-					RouteOverlay routeOverlay = new RouteOverlay(
-							googleParser.parse(getConnection(url)), Color.BLUE);
-					mapView.getOverlays().add(routeOverlay);
-				}
-				mapView.invalidate();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapController = mapView.getController();
 		mapController.setZoom(18); // Fixed Zoom Level
+		
+		onRefreshClicked(null);
 
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LongboardLocationListener();
@@ -326,6 +289,45 @@ public class MainActivity extends MapActivity {
 	}
 
 	public void onRefreshClicked(View v) {
+		BufferedReader in = null;
+		String line = null;
+		try {
+			in = new BufferedReader(
+					new InputStreamReader(
+							getConnection("http://hillbomber.herokuapp.com/trails.json")));
+			mapView.getOverlays().clear();
+			while ((line = in.readLine()) != null) {
+				JSONArray routes = (JSONArray) new JSONTokener(line)
+						.nextValue();
+				for (int i = 0; i < routes.length(); i++) {
+					JSONObject route = routes.getJSONObject(i);
+					String url = googleParser.directions(new GeoPoint(
+							(int) (route.getDouble("s_lat") * 1E6),
+							(int) (route.getDouble("s_long") * 1E6)),
+							new GeoPoint(
+									(int) (route.getDouble("e_lat") * 1E6),
+									(int) (route.getDouble("e_long") * 1E6)));
+					RouteOverlay routeOverlay = new RouteOverlay(
+							googleParser.parse(getConnection(url)), Color.BLUE);
+					mapView.getOverlays().add(routeOverlay);
+				}
+			}
+			mapView.invalidate();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private InputStream getConnection(String url) {
