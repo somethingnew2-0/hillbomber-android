@@ -52,6 +52,8 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class MainActivity extends MapActivity {
 
@@ -153,13 +155,18 @@ public class MainActivity extends MapActivity {
 										response).nextValue();
 								facebookId = me.getString("id");
 								facebookName = me.getString("name");
-								
+
 								List<NameValuePair> params = new ArrayList<NameValuePair>();
-								params.add(new BasicNameValuePair("uid", facebookId));
-								params.add(new BasicNameValuePair("name", facebookName));
-								postConnection("http://hillbomber.herokuapp.com/mobile_user.json", params);
-								
-								SharedPreferences.Editor editor = userPreferences.edit();
+								params.add(new BasicNameValuePair("uid",
+										facebookId));
+								params.add(new BasicNameValuePair("name",
+										facebookName));
+								postConnection(
+										"http://hillbomber.herokuapp.com/mobile_user.json",
+										params);
+
+								SharedPreferences.Editor editor = userPreferences
+										.edit();
 								editor.putString("facebook_id", facebookId);
 								editor.putString("facebook_name", facebookName);
 								editor.commit();
@@ -189,7 +196,7 @@ public class MainActivity extends MapActivity {
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapController = mapView.getController();
 		mapController.setZoom(18); // Fixed Zoom Level
-		
+
 		onRefreshClicked(null);
 
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -295,21 +302,26 @@ public class MainActivity extends MapActivity {
 			in = new BufferedReader(
 					new InputStreamReader(
 							getConnection("http://hillbomber.herokuapp.com/trails.json")));
-			mapView.getOverlays().clear();
+			List<Overlay> overlays = mapView.getOverlays();
+			overlays.clear();
 			while ((line = in.readLine()) != null) {
 				JSONArray routes = (JSONArray) new JSONTokener(line)
 						.nextValue();
 				for (int i = 0; i < routes.length(); i++) {
 					JSONObject route = routes.getJSONObject(i);
-					String url = googleParser.directions(new GeoPoint(
+					GeoPoint startPoint = new GeoPoint(
 							(int) (route.getDouble("s_lat") * 1E6),
-							(int) (route.getDouble("s_long") * 1E6)),
-							new GeoPoint(
-									(int) (route.getDouble("e_lat") * 1E6),
-									(int) (route.getDouble("e_long") * 1E6)));
+							(int) (route.getDouble("s_long") * 1E6));
+					GeoPoint endPoint = new GeoPoint(
+							(int) (route.getDouble("e_lat") * 1E6),
+							(int) (route.getDouble("e_long") * 1E6));
+					String url = googleParser.directions(startPoint, endPoint);
+					PinItemizedOverlay pinItemizedOverlay = new PinItemizedOverlay(route.getInt("difficulty"), getApplicationContext());
+					pinItemizedOverlay.addOverlay(new OverlayItem(startPoint, route.getString("title"), "by " + route.getString("creator")));
+					overlays.add(pinItemizedOverlay);
 					RouteOverlay routeOverlay = new RouteOverlay(
 							googleParser.parse(getConnection(url)), Color.BLUE);
-					mapView.getOverlays().add(routeOverlay);
+					overlays.add(routeOverlay);
 				}
 			}
 			mapView.invalidate();
@@ -363,22 +375,6 @@ public class MainActivity extends MapActivity {
 		}
 	}
 
-	private int difficultyToInteger(String id) {
-		id = id.toLowerCase();
-		if (id.contains("green")) {
-			return 0;
-		} else if (id.contains("blue")) {
-			return 1;
-		} else if (id.contains("double")) {
-			return 2;
-		} else if (id.contains("black")) {
-			return 3;
-		} else {
-			return -1;
-		}
-
-	}
-
 	private class LongboardLocationListener implements LocationListener {
 
 		public void onLocationChanged(Location argLocation) {
@@ -405,6 +401,22 @@ public class MainActivity extends MapActivity {
 
 	private void centerLocation(GeoPoint centerGeoPoint) {
 		mapController.animateTo(centerGeoPoint);
+	}
+	
+	private static int difficultyToInteger(String id) {
+		id = id.toLowerCase();
+		if (id.contains("green")) {
+			return 0;
+		} else if (id.contains("blue")) {
+			return 1;
+		} else if (id.contains("double")) {
+			return 2;
+		} else if (id.contains("black")) {
+			return 3;
+		} else {
+			return -1;
+		}
+
 	}
 
 }
