@@ -2,5 +2,11 @@
 
     <string name="app_name">Hillbomber</string>
     <string name="menu_settings">Settings</string>
+    <string name="greenCircle">Green Circle</string>
+    <string name="blueSquare">Blue Square</string>
+    <string name="blackDiamond">Black Diamond</string>
+    <string name="doubleBlackDiamond">Double Black Diamond</string>
+    <string name="start">Start!</string>
+    <string name="title">Title</string>
 
 </resources>
