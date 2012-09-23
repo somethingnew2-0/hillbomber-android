@@ -16,16 +16,11 @@
 bin/
 gen/
 .metadata/
+.settings/
 *.tmp
 *.bak
 *.swp
 *~.nib
 local.properties
 .classpath
-.settings/
 .loadpath
-
-
-/Hillbomber/bin
-/Hillbomber/gen
-/.metadata
