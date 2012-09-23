@@ -316,7 +316,7 @@ public class MainActivity extends MapActivity {
 							(int) (route.getDouble("e_lat") * 1E6),
 							(int) (route.getDouble("e_long") * 1E6));
 					String url = googleParser.directions(startPoint, endPoint);
-					PinItemizedOverlay pinItemizedOverlay = new PinItemizedOverlay(route.getInt("difficulty"), getApplicationContext());
+					PinItemizedOverlay pinItemizedOverlay = new PinItemizedOverlay(route.getInt("difficulty"), this);
 					pinItemizedOverlay.addOverlay(new OverlayItem(startPoint, route.getString("title"), "by " + route.getString("creator")));
 					overlays.add(pinItemizedOverlay);
 					RouteOverlay routeOverlay = new RouteOverlay(
