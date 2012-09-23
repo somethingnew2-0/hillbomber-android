@@ -26,6 +26,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
@@ -42,10 +46,14 @@ public class MainActivity extends MapActivity {
 
 	private LocationManager locationManager;
 	private LocationListener locationListener;
+	
+	private String currentRoute, currentDifficulty;
 
 	private MapView mapView;
 	private View routeView; 
-	private Button refreshButton, newButton, startButton, endButton;  
+	private Button refreshButton, newButton, startButton, endButton;
+	private EditText titleText;
+	private RadioGroup difficultyRadios;
 
 	private MapController mapController;
 	private GoogleParser googleParser;
@@ -71,6 +79,8 @@ public class MainActivity extends MapActivity {
 				onStartRouteClicked(v);
 			}
 		});
+		titleText = (EditText)routeView.findViewById(R.id.title);
+		difficultyRadios = (RadioGroup)routeView.findViewById(R.id.difficulty);
 		addContentView(routeView, new LayoutParams());
 		
 		mapView = (MapView) findViewById(R.id.mapview);
@@ -180,16 +190,37 @@ public class MainActivity extends MapActivity {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public void onBackPressed() {
+		if(routeView.getVisibility() == View.VISIBLE) {
+			routeView.setVisibility(View.GONE);
+		}
+		else {
+			super.onBackPressed();
+		}
+	}
 
 	public void onNewRouteClicked(View v) {
 		routeView.setVisibility(View.VISIBLE);
+		titleText.setText("");
+		difficultyRadios.clearCheck();
 	}
 	
 	public void onStartRouteClicked(View v) {
-		refreshButton.setVisibility(View.GONE);
-		newButton.setVisibility(View.GONE);
-		endButton.setVisibility(View.VISIBLE);
-		routeView.setVisibility(View.GONE);
+		if (!titleText.getText().toString().equals("")) {
+			currentRoute = titleText.getText().toString();
+			currentDifficulty = ((RadioButton)difficultyRadios.findViewById(difficultyRadios.getCheckedRadioButtonId())).getText().toString();
+			
+			refreshButton.setVisibility(View.GONE);
+			newButton.setVisibility(View.GONE);
+			endButton.setVisibility(View.VISIBLE);
+			routeView.setVisibility(View.GONE);
+		}
+		else {
+			Toast toast = Toast.makeText(getApplicationContext(), "Please title your new trail", Toast.LENGTH_SHORT);
+			toast.show();
+		}
 	}
 	
 	public void onEndRouteClicked(View v) {
