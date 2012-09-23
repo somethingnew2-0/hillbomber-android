@@ -31,25 +31,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/greenCircle" />
+            android:text="@string/greenCircle"
+            android:button="@drawable/green" />
 
         <RadioButton
             android:id="@+id/blueSquare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/blueSquare" />
+            android:text="@string/blueSquare"
+            android:button="@drawable/blue" />
 
         <RadioButton
             android:id="@+id/blackDiamond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/blackDiamond" />
+            android:text="@string/blackDiamond"
+            android:button="@drawable/black" />
 
         <RadioButton
             android:id="@+id/doubleBlackDiamond"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/doubleBlackDiamond" />
+            android:text="@string/doubleBlackDiamond"
+            android:button="@drawable/dblblack" />
     </RadioGroup>
 
     <Button
@@ -57,6 +61,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start" />
+        android:text="@string/start"
+        android:textColor="@color/text_color"
+        android:background="@drawable/button"/>
 
 </LinearLayout>

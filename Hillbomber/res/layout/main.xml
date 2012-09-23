@@ -17,8 +17,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:background="@drawable/button"
+        android:onClick="onNewRouteClicked"
         android:text="@string/newRoute"
-        android:onClick="onNewRouteClicked" />
+        android:textColor="@color/text_color"/>
 
     <Button
         android:id="@+id/endRoute"
@@ -26,9 +28,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:onClick="onEndRouteClicked"
         android:text="@string/endRoute"
-        android:visibility="gone" 
-        android:onClick="onEndRouteClicked"/>
+        android:textColor="@color/text_color"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/refresh"
@@ -36,7 +40,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:background="@drawable/button"
+        android:onClick="onRefreshClicked"
         android:text="@string/refresh"
-        android:onClick="onRefreshClicked" />
+        android:textColor="@color/text_color" />
 
 </RelativeLayout>

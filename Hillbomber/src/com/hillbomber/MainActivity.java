@@ -67,8 +67,8 @@ public class MainActivity extends MapActivity {
 	private Location startLocation, endLocation;
 
 	private MapView mapView;
-	private View routeView;
-	private Button refreshButton, newButton, startButton, endButton;
+	private View startView, routeView;
+	private Button trailMapButton, refreshButton, newButton, startButton, endButton;
 	private EditText titleText;
 	private RadioGroup difficultyRadios;
 
@@ -89,6 +89,16 @@ public class MainActivity extends MapActivity {
 
 		LayoutInflater inflater = (LayoutInflater) getApplicationContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		startView = inflater.inflate(R.layout.start, null);
+		trailMapButton = (Button) startView.findViewById(R.id.trailmap);
+		trailMapButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startView.setVisibility(View.GONE);
+			}
+		});
+		addContentView(startView, new LayoutParams());
+		
 		routeView = inflater.inflate(R.layout.route, null);
 		routeView.setVisibility(View.GONE);
 		startButton = (Button) routeView.findViewById(R.id.start);
@@ -235,8 +245,12 @@ public class MainActivity extends MapActivity {
 	public void onBackPressed() {
 		if (routeView.getVisibility() == View.VISIBLE) {
 			routeView.setVisibility(View.GONE);
-		} else {
+		} 
+		else if(startView.getVisibility() == View.VISIBLE) {
 			super.onBackPressed();
+		}
+		else {
+			startView.setVisibility(View.VISIBLE);
 		}
 	}
 
