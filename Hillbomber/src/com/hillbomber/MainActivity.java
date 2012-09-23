@@ -189,11 +189,11 @@ public class MainActivity extends MapActivity {
 				}
 
 				public void onFacebookError(FacebookError e) {
-					// Log.e("Facebook Error", e.toString());
+//					 Log.e("Facebook Error", e.toString());
 				}
 
 				public void onError(DialogError e) {
-					// Log.e("Facebook Error", e.toString());
+//					 Log.e("Facebook Error", e.toString());
 				}
 
 				public void onCancel() {

@@ -8,8 +8,9 @@
         android:id="@+id/mapview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="0LGOZpKMcQCYTkN6MoxXdQBvA2e9SpJgwYUK8Sw"
+        android:apiKey="0LGOZpKMcQCYpmNtaOBg4e0xjwogNgYOVgNoInA"
         android:clickable="true" />
+    <!-- android:apiKey="0LGOZpKMcQCYTkN6MoxXdQBvA2e9SpJgwYUK8Sw" -->
 
     <Button
         android:id="@+id/newRoute"
@@ -20,7 +21,7 @@
         android:background="@drawable/button"
         android:onClick="onNewRouteClicked"
         android:text="@string/newRoute"
-        android:textColor="@color/text_color"/>
+        android:textColor="@color/text_color" />
 
     <Button
         android:id="@+id/endRoute"
