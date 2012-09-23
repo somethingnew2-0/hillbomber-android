@@ -10,3 +10,21 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64
 
 !ENTRY org.eclipse.ui 4 4 2012-09-22 20:56:19.836
 !MESSAGE Invalid preference page path: XML Syntax
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-09-22 21:12:11.107
+!MESSAGE main.xml: Failed to find style 'mapViewStyle' in current theme
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-09-22 21:12:11.113
+!MESSAGE main.xml: Failed to find style 'mapViewStyle' in current theme
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-09-22 21:12:11.145
+!MESSAGE main.xml: Failed to find style 'mapViewStyle' in current theme
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-09-22 21:23:32.733
+!MESSAGE main.xml: Failed to find style 'mapViewStyle' in current theme
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-09-22 21:23:32.734
+!MESSAGE main.xml: Failed to find style 'mapViewStyle' in current theme
+
+!ENTRY com.android.ide.eclipse.adt 4 0 2012-09-22 21:23:32.736
+!MESSAGE main.xml: Failed to find style 'mapViewStyle' in current theme

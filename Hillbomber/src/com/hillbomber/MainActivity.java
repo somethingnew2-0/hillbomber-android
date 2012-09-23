@@ -1,12 +1,11 @@
 package com.hillbomber;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 
-public class MainActivity extends Activity {
+import com.google.android.maps.MapActivity;
+
+public class MainActivity extends MapActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,5 +19,10 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
