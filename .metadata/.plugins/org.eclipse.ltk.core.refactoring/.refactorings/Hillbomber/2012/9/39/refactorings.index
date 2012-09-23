@@ -1,2 +1,9 @@
 1348365395550	Rename resource 'activity_main.xml'
 1348365454491	Rename resource 'Main.xml'
+1348368879706	Delete element
+1348369298331	Rename field 'mCurrentElement'
+1348369302243	Rename field 'mRoad'
+1348369308359	Rename field 'mString'
+1348370765575	Rename field 'mPoints'
+1348372393239	Delete elements
+1348372814010	Rename local variable 'sBuf'

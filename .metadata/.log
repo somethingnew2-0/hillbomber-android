@@ -28,3 +28,6 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64
 
 !ENTRY com.android.ide.eclipse.adt 4 0 2012-09-22 21:23:32.736
 !MESSAGE main.xml: Failed to find style 'mapViewStyle' in current theme
+
+!ENTRY org.eclipse.ui 4 4 2012-09-22 22:28:27.470
+!MESSAGE Referenced part does not exist yet: org.eclipse.ui.views.ProblemView.
