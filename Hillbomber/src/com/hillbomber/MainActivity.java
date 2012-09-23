@@ -23,8 +23,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.LayoutParams;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.facebook.android.DialogError;
@@ -56,10 +56,21 @@ public class MainActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		refreshButton = (Button)findViewById(R.id.refresh);
+		newButton = (Button)findViewById(R.id.newRoute);
+		endButton = (Button)findViewById(R.id.endRoute);
+		
 		LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService
 			      (Context.LAYOUT_INFLATER_SERVICE);
 		routeView = inflater.inflate(R.layout.route, null);
 		routeView.setVisibility(View.GONE);
+		startButton = (Button)routeView.findViewById(R.id.start);
+		startButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onStartRouteClicked(v);
+			}
+		});
 		addContentView(routeView, new LayoutParams());
 		
 		mapView = (MapView) findViewById(R.id.mapview);
@@ -174,8 +185,17 @@ public class MainActivity extends MapActivity {
 		routeView.setVisibility(View.VISIBLE);
 	}
 	
+	public void onStartRouteClicked(View v) {
+		refreshButton.setVisibility(View.GONE);
+		newButton.setVisibility(View.GONE);
+		endButton.setVisibility(View.VISIBLE);
+		routeView.setVisibility(View.GONE);
+	}
+	
 	public void onEndRouteClicked(View v) {
-		routeView.setVisibility(View.VISIBLE);
+		newButton.setVisibility(View.VISIBLE);
+		endButton.setVisibility(View.GONE);
+		refreshButton.setVisibility(View.VISIBLE);
 	}
 	
 	public void onRefreshClicked(View v) {
