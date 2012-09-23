@@ -21,6 +21,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import com.facebook.android.DialogError;
@@ -68,10 +69,12 @@ public class MainActivity extends MapActivity {
                     editor.commit();
 				}
 
-				public void onFacebookError(FacebookError error) {
+				public void onFacebookError(FacebookError e) {
+//					Log.e("Facebook Error", e.toString());
 				}
 
 				public void onError(DialogError e) {
+//					Log.e("Facebook Error", e.toString());
 				}
 
 				public void onCancel() {
