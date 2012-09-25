@@ -68,7 +68,8 @@ public class MainActivity extends MapActivity {
 
 	private MapView mapView;
 	private View startView, routeView;
-	private Button trailMapButton, refreshButton, newButton, startButton, endButton;
+	private Button trailMapButton, refreshButton, newButton, startButton,
+			endButton;
 	private EditText titleText;
 	private RadioGroup difficultyRadios;
 
@@ -98,7 +99,7 @@ public class MainActivity extends MapActivity {
 			}
 		});
 		addContentView(startView, new LayoutParams());
-		
+
 		routeView = inflater.inflate(R.layout.route, null);
 		routeView.setVisibility(View.GONE);
 		startButton = (Button) routeView.findViewById(R.id.start);
@@ -159,7 +160,7 @@ public class MainActivity extends MapActivity {
 
 						@Override
 						public void onComplete(String response, Object state) {
-//							Log.i("Facebook Me", response);
+							// Log.i("Facebook Me", response);
 							try {
 								JSONObject me = (JSONObject) new JSONTokener(
 										response).nextValue();
@@ -189,11 +190,11 @@ public class MainActivity extends MapActivity {
 				}
 
 				public void onFacebookError(FacebookError e) {
-//					 Log.e("Facebook Error", e.toString());
+					// Log.e("Facebook Error", e.toString());
 				}
 
 				public void onError(DialogError e) {
-//					 Log.e("Facebook Error", e.toString());
+					// Log.e("Facebook Error", e.toString());
 				}
 
 				public void onCancel() {
@@ -214,12 +215,15 @@ public class MainActivity extends MapActivity {
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 				0, locationListener);
 
-		// Get the current location in start-up
-		centerLocation(new GeoPoint((int) (locationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-				.getLatitude() * 1E6), (int) (locationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-				.getLongitude() * 1E6)));
+		try {
+			// Get the current location in start-up
+			centerLocation(new GeoPoint((int) (locationManager
+					.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+					.getLatitude() * 1E6), (int) (locationManager
+					.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+					.getLongitude() * 1E6)));
+		} catch (NullPointerException e) {
+		}
 	}
 
 	@Override
@@ -245,11 +249,9 @@ public class MainActivity extends MapActivity {
 	public void onBackPressed() {
 		if (routeView.getVisibility() == View.VISIBLE) {
 			routeView.setVisibility(View.GONE);
-		} 
-		else if(startView.getVisibility() == View.VISIBLE) {
+		} else if (startView.getVisibility() == View.VISIBLE) {
 			super.onBackPressed();
-		}
-		else {
+		} else {
 			startView.setVisibility(View.VISIBLE);
 		}
 	}
@@ -330,8 +332,11 @@ public class MainActivity extends MapActivity {
 							(int) (route.getDouble("e_lat") * 1E6),
 							(int) (route.getDouble("e_long") * 1E6));
 					String url = googleParser.directions(startPoint, endPoint);
-					PinItemizedOverlay pinItemizedOverlay = new PinItemizedOverlay(route.getInt("difficulty"), this);
-					pinItemizedOverlay.addOverlay(new OverlayItem(startPoint, route.getString("title"), "by " + route.getString("creator")));
+					PinItemizedOverlay pinItemizedOverlay = new PinItemizedOverlay(
+							route.getInt("difficulty"), this);
+					pinItemizedOverlay.addOverlay(new OverlayItem(startPoint,
+							route.getString("title"), "by "
+									+ route.getString("creator")));
 					overlays.add(pinItemizedOverlay);
 					RouteOverlay routeOverlay = new RouteOverlay(
 							googleParser.parse(getConnection(url)), Color.BLUE);
@@ -416,7 +421,7 @@ public class MainActivity extends MapActivity {
 	private void centerLocation(GeoPoint centerGeoPoint) {
 		mapController.animateTo(centerGeoPoint);
 	}
-	
+
 	private static int difficultyToInteger(String id) {
 		id = id.toLowerCase();
 		if (id.contains("green")) {
