@@ -31,11 +31,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager.LayoutParams;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -75,6 +76,8 @@ public class MainActivity extends MapActivity {
 
 	private MapController mapController;
 	private GoogleParser googleParser;
+	
+	private List<Overlay> customOverlays = new ArrayList<Overlay>();
 
 	private Facebook facebook = new Facebook("468347859863144");
 	private AsyncFacebookRunner asyncFacebookRunner = new AsyncFacebookRunner(
@@ -98,7 +101,7 @@ public class MainActivity extends MapActivity {
 				startView.setVisibility(View.GONE);
 			}
 		});
-		addContentView(startView, new LayoutParams());
+		addContentView(startView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		routeView = inflater.inflate(R.layout.route, null);
 		routeView.setVisibility(View.GONE);
@@ -111,7 +114,7 @@ public class MainActivity extends MapActivity {
 		});
 		titleText = (EditText) routeView.findViewById(R.id.title);
 		difficultyRadios = (RadioGroup) routeView.findViewById(R.id.difficulty);
-		addContentView(routeView, new LayoutParams());
+		addContentView(routeView,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		mapView = (MapView) findViewById(R.id.mapview);
 		userPreferences = getPreferences(MODE_PRIVATE);
@@ -155,7 +158,7 @@ public class MainActivity extends MapActivity {
 						@Override
 						public void onFacebookError(FacebookError e,
 								Object state) {
-							// Log.e("Facebook Error", e.toString());
+							 // Log.e("Facebook Error", e.toString());
 						}
 
 						@Override
@@ -312,54 +315,69 @@ public class MainActivity extends MapActivity {
 	}
 
 	public void onRefreshClicked(View v) {
-		BufferedReader in = null;
-		String line = null;
-		try {
-			in = new BufferedReader(
-					new InputStreamReader(
-							getConnection("http://hillbomber.herokuapp.com/trails.json")));
+		new Thread() {
+			@Override
+			public void run() {
+
+				BufferedReader in = null;
+				String line = null;
+				try {
+					in = new BufferedReader(
+							new InputStreamReader(
+									getConnection("http://hillbomber.herokuapp.com/trails.json")));
+					customOverlays.clear();
+					while ((line = in.readLine()) != null) {
+						JSONArray routes = (JSONArray) new JSONTokener(line)
+								.nextValue();
+						for (int i = 0; i < routes.length(); i++) {
+							JSONObject route = routes.getJSONObject(i);
+							GeoPoint startPoint = new GeoPoint(
+									(int) (route.getDouble("s_lat") * 1E6),
+									(int) (route.getDouble("s_long") * 1E6));
+							GeoPoint endPoint = new GeoPoint(
+									(int) (route.getDouble("e_lat") * 1E6),
+									(int) (route.getDouble("e_long") * 1E6));
+							String url = googleParser.directions(startPoint, endPoint);
+							PinItemizedOverlay pinItemizedOverlay = new PinItemizedOverlay(
+									route.getInt("difficulty"), MainActivity.this);
+							pinItemizedOverlay.addOverlay(new OverlayItem(startPoint,
+									route.getString("title"), "by "
+											+ route.getString("creator")));
+							customOverlays.add(pinItemizedOverlay);
+							RouteOverlay routeOverlay = new RouteOverlay(
+									googleParser.parse(getConnection(url)), Color.BLUE);
+							customOverlays.add(routeOverlay);
+						}
+					}
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					if (in != null) {
+						try {
+							in.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				handler.sendEmptyMessage(0);
+			}
+		}.start();
+	}
+	
+    Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
 			List<Overlay> overlays = mapView.getOverlays();
 			overlays.clear();
-			while ((line = in.readLine()) != null) {
-				JSONArray routes = (JSONArray) new JSONTokener(line)
-						.nextValue();
-				for (int i = 0; i < routes.length(); i++) {
-					JSONObject route = routes.getJSONObject(i);
-					GeoPoint startPoint = new GeoPoint(
-							(int) (route.getDouble("s_lat") * 1E6),
-							(int) (route.getDouble("s_long") * 1E6));
-					GeoPoint endPoint = new GeoPoint(
-							(int) (route.getDouble("e_lat") * 1E6),
-							(int) (route.getDouble("e_long") * 1E6));
-					String url = googleParser.directions(startPoint, endPoint);
-					PinItemizedOverlay pinItemizedOverlay = new PinItemizedOverlay(
-							route.getInt("difficulty"), this);
-					pinItemizedOverlay.addOverlay(new OverlayItem(startPoint,
-							route.getString("title"), "by "
-									+ route.getString("creator")));
-					overlays.add(pinItemizedOverlay);
-					RouteOverlay routeOverlay = new RouteOverlay(
-							googleParser.parse(getConnection(url)), Color.BLUE);
-					overlays.add(routeOverlay);
-				}
-			}
+			overlays.addAll(customOverlays);
 			mapView.invalidate();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+        };
+    };
 
 	private InputStream getConnection(String url) {
 		InputStream is = null;

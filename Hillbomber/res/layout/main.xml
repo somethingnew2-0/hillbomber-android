@@ -8,8 +8,10 @@
         android:id="@+id/mapview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="0LGOZpKMcQCYpmNtaOBg4e0xjwogNgYOVgNoInA"
+        android:apiKey="0LGOZpKMcQCZiU3ztM4g1iRg1lbv_tICpOiNbnQ"
         android:clickable="true" />
+	<!-- android:apiKey="0LGOZpKMcQCamdsnengyq1OcOpHFTq60YRVKR2w" -->
+    <!-- android:apiKey="0LGOZpKMcQCYpmNtaOBg4e0xjwogNgYOVgNoInA" -->
     <!-- android:apiKey="0LGOZpKMcQCYpmNtaOBg4e0xjwogNgYOVgNoInA" -->
     <!-- android:apiKey="0LGOZpKMcQCYTkN6MoxXdQBvA2e9SpJgwYUK8Sw" -->
 
